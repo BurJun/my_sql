@@ -18,23 +18,49 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'LoginView',
   data() {
     return {
       email: '',
       password: '',
+      error: null,
     };
   },
   methods: {
-    submitForm() {
-      if (this.validateEmail(this.email) && this.password) {
-        // Здесь можно добавить логику для отправки данных на сервер или другую обработку
-        alert('Вход выполнен успешно!');
-      } else {
-        alert('Пожалуйста, проверьте правильность данных.');
-      }
-    },
+    async submitForm() {
+  if (this.validateEmail(this.email) && this.password) {
+    try {
+      // Отправка данных на сервер для авторизации
+      const response = await axios.post('http://localhost:5000/api/login', {
+        email: this.email,
+        password: this.password,
+      });
+
+      // Сохраняем токен в localStorage
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+
+      // Сохраняем пользователя и токен в Vuex
+      this.$store.commit('setUser', user);
+      this.$store.commit('setToken', token);
+
+      // Переход на главную страницу
+      this.$router.push('/main');
+
+      console.log('Авторизация прошла успешно');
+      alert('Вход выполнен успешно!');
+    } catch (error) {
+      console.error('Ошибка при входе:', error);
+      this.error = 'Неправильный email или пароль.';
+      alert(this.error);
+    }
+  } else {
+    alert('Пожалуйста, проверьте правильность данных.');
+  }
+},
     validateEmail(email) {
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return re.test(email);

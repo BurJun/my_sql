@@ -37,10 +37,34 @@ export default {
     };
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       if (this.password === this.confirmPassword) {
-        // Здесь можно добавить логику для отправки данных на сервер или другую обработку
-        alert('Регистрация успешна!');
+        const userData = {
+          username: this.name,
+          email: this.email,
+          password: this.password,
+        };
+
+        try {
+          const response = await fetch('http://localhost:5000/api/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+          });
+
+          if (response.ok) {
+            alert('Регистрация успешна!');
+            this.$router.push('/login'); // Перенаправление на страницу входа
+          } else {
+            const errorData = await response.json();
+            alert(`Ошибка регистрации: ${errorData.message}`);
+          }
+        } catch (error) {
+          console.error('Ошибка:', error);
+          alert('Произошла ошибка при регистрации. Попробуйте позже.');
+        }
       } else {
         alert('Пароли не совпадают');
       }

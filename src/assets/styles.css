@@ -43,3 +43,32 @@ body {
     background-color: #4dd0e1;
     color: #01579b;
   }
+  /* Общий стиль для блоков кода */
+.lesson-content pre {
+    background: #2d2d2d;
+    color: #f8f8f2;
+    padding: 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    position: relative;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+  }
+  
+  .lesson-content code {
+    font-family: 'Fira Code', monospace;
+  }
+  
+  /* Кнопка копирования */
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #444;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    border-radius: 4px;
+  }
